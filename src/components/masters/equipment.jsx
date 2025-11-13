@@ -3,7 +3,7 @@ import Datatable from "../datatable/datatable";
 import { getEquipmentListService } from "../../services/masterservice";
 import EquipmentAddEditComponent from "./equipmentAddEditComponent";
 import "../datatable/master.css";
-import { FaUserEdit } from "react-icons/fa";
+import { FaEdit, FaUserEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Navbar from "../navbar/navbar";
 
@@ -15,10 +15,13 @@ const Equipment = () => {
 
   const columns = [
     { name: "SN", selector: (row) => row.sn, sortable: true, align: 'text-center' },
-    { name: "Calibration Agency", selector: (row) => row.calibrationAgency, sortable: true, align: 'text-start' },
-    { name: "Procured By", selector: (row) => row.procuredBy, sortable: true, align: 'text-start' },
+    { name: "Equipment Name", selector: (row) => row.equipmentName, sortable: true, align: 'text-start' },
+    { name: "Item Serial No", selector: (row) => row.itemSerialNumber, sortable: true, align: 'text-center' },
+     { name: "Make", selector: (row) => row.make, sortable: true, align: 'text-start' },
+     { name: "Model", selector: (row) => row.model, sortable: true, align: 'text-start' },
     { name: "Item Cost", selector: (row) => row.itemCost, sortable: true, align: 'text-end' },
-    { name: "Location", selector: (row) => row.location, sortable: true, align: 'text-center', },
+    { name: "Location", selector: (row) => row.location, sortable: true, align: 'text-start', },
+    { name: "Initiating Officer", selector: (row) => row.initiateOfficerName, sortable: true, align: 'text-start' },
     { name: "Action", selector: (row) => row.action, sortable: true, align: 'text-center', },
   ];
 
@@ -52,13 +55,17 @@ const Equipment = () => {
     setEquipmentList(
       data.map((item, index) => ({
         sn: index + 1 + '.',
-        calibrationAgency: item.calibrationAgency ?? '-',
+        equipmentName: item.equipmentName ?? '-',
+        itemSerialNumber: item.itemSerialNumber ?? '-',
+        make: item.make ?? '-',
+        model: item.model ?? '-',
+        
         itemCost: item.itemCost ?? '-',
-        procuredBy: item.procuredBy ?? '-',
         location: item.location ?? '-',
+        initiateOfficerName: item.initiateOfficerName ?? '-',
         action: (
-              <button className="btn btn-warning btn-sm me-1" onClick={() => item.id != null && editEquipment(item.id)} title="Edit Equipment">
-                <FaUserEdit size={16} />
+              <button className="btn btn-warning btn-sm" onClick={() => item.equipmentId != null && editEquipment(item.equipmentId)} title="Edit Equipment">
+                <FaEdit size={16} />
               </button>    
         ),
       }))

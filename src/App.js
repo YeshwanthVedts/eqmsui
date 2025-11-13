@@ -1,6 +1,6 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import LoginPage from'./components/login/login';
+import LoginPage from'./components/Login/login';
 import Dashboard from'./components/dashboard/dashboard';
 import Equipment from'./components/masters/equipment';
 import EquipmentLog from './components/masters/equipmentLog';

@@ -4,7 +4,7 @@ import Datatable from "../datatable/datatable";
 import {getEquipmentLogListService}  from "../../services/masterservice";
 import EquipmentLogAddEditComponent from "./equipmentLogAddEditComponent";
 import "../datatable/master.css";
-import { FaUserEdit } from "react-icons/fa";
+import { FaEdit, FaUserEdit } from "react-icons/fa";
  import { Link } from "react-router-dom";
 import Navbar from "../navbar/navbar";
 import formatDate from "../../common/dateFormatter";
@@ -17,11 +17,12 @@ const EquipmentLog= () =>{
 
 const columns = [
   { name: "SN", selector: (row) => row.sn, sortable: true, align: 'text-center' },
-  { name: "Calibration Agency", selector: (row) => row.equipment, sortable: true, align: 'text-start' },
+  { name: "Equipment", selector: (row) => row.equipmentName, sortable: true, align: 'text-start' },
   { name: "Start Time", selector: (row) => row.startTime, sortable: true, align: 'text-center' },
   { name: "End Time", selector: (row) => row.endTime, sortable: true, align: 'text-center' },
   { name: "Total Hours", selector: (row) => row.totalHours, sortable: true, align: 'text-end' },
   { name: "Usage Date", selector: (row) => row.usageDate, sortable: true, align: 'text-center', },
+   { name: "Used By", selector: (row) => row.usedByName, sortable: true, align: 'text-center', },
   { name: "Action", selector: (row) => row.action, sortable: true, align: 'text-center', },
 ];
 
@@ -55,14 +56,15 @@ const addEquipmentLog = () =>{
         setEquipmentLogList(
           data.map((item, index) => ({
             sn: index + 1 + '.',
-            equipment: item.equipment?.calibrationAgency?.trim() ? item.equipment.calibrationAgency : '-',
+            equipmentName: item.equipmentName? item.equipmentName : '-',
             startTime: item.startTime ? formatDate(item.startTime) : '-',
             endTime: item.endTime ? formatDate(item.endTime) : '-',
             totalHours: item.totalHours != null ? `${item.totalHours}` : '-',
             usageDate: item.usageDate ? formatDate(item.usageDate, false) : '-',
+            usedByName: item.usedByName ? item.usedByName : '-',
             action: (
                 <button className="btn btn-warning btn-sm me-1" onClick={() => item.id != null && editEquipmentLog(item.id)} title="Edit Equipment Log">
-                  <FaUserEdit  size={16}/>
+                  <FaEdit  size={16}/>
                 </button>
             ),
           }))

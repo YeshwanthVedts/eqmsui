@@ -18,11 +18,12 @@ export const getEquipmentListService = async () => {
 
 export const saveEquipmentData = async (data) => {
   try {
+    
     const response = await axios.post(`${API_URL}api/equipment`, data, {
       headers: {
-        'Content-Type': 'application/json',
-        ...authHeader(),
-      },
+        'Content-Type': 'multipart/form-data',
+        ...authHeader()
+      }
     });
     return response.data;
   } catch (error) {
@@ -31,11 +32,26 @@ export const saveEquipmentData = async (data) => {
   }
 }
 
-export const partialUpdateEquipment = async (id, partialData) => {
+// export const partialUpdateEquipment = async (id, partialData) => {
+//   try {
+//     const response = await axios.patch(`${API_URL}api/equipment/${id}`, partialData, {
+//       headers: {
+//         "Content-Type": "application/merge-patch+json",
+//         ...authHeader(),
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error updating equipment partially:", error);
+//     throw error;
+//   }
+// }
+
+export const UpdateEquipment = async (id,values) => {
   try {
-    const response = await axios.patch(`${API_URL}api/equipment/${id}`, partialData, {
+    const response = await axios.put(`${API_URL}api/equipment/${id}`, values, {
       headers: {
-        "Content-Type": "application/merge-patch+json",
+         'Content-Type': 'multipart/form-data',
         ...authHeader(),
       },
     });
@@ -101,20 +117,36 @@ export const getEquipmentLogById = async (id) => {
   }
 }
 
-export const partialUpdateEquipmentLog = async (id, partialData) => {
+// export const partialUpdateEquipmentLog = async (id, partialData) => {
+//   try {
+//     const response = await axios.patch(`${API_URL}api/equipment-usage-logs/${id}`, partialData, {
+//       headers: {
+//         "Content-Type": "application/merge-patch+json",
+//         ...authHeader(),
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error updating equipment log partially:", error);
+//     throw error;
+//   }
+// }
+
+export const UpdateEquipmentLog = async (id, Data) => {
   try {
-    const response = await axios.patch(`${API_URL}api/equipment-usage-logs/${id}`, partialData, {
+    const response = await axios.put(`${API_URL}api/equipment-usage-logs/${id}`, Data, {
       headers: {
-        "Content-Type": "application/merge-patch+json",
+         'Content-Type': 'application/json',
         ...authHeader(),
       },
     });
     return response.data;
   } catch (error) {
-    console.error("Error updating equipment log partially:", error);
+    console.error("Error updating equipment log:", error);
     throw error;
   }
 }
+
 
 export const getModelListService = async () => {
   try {
@@ -174,9 +206,10 @@ export const partialUpdateModel = async (id, partialData) => {
 
 export const getMakeListService = async () => {
   try {
-    const response = await axios.get(`${API_URL}api/makes`, {
-      headers: authHeader(),
-    });
+    const response = await axios.get(`${API_URL}api/makes`,
+      {
+        headers: authHeader(),
+      });
     return response.data;
   } catch (error) {
     console.error("Error fetching make list:", error);
@@ -184,6 +217,35 @@ export const getMakeListService = async () => {
   }
 }
 
+
+export const getEmployeeListService = async () => {
+  try {
+    const response = await axios.get(`${API_URL}api/master/employee`, {
+      headers: {
+        ...authHeader(),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching model by ID:", error);
+    throw error;
+  }
+}
+
+
+export const getProjectListService = async () => {
+  try {
+    const response = await axios.get(`${API_URL}api/master/project`, {
+      headers: {
+        ...authHeader(),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching model by ID:", error);
+    throw error;
+  }
+}
 
 export const getMakeById = async (id) => {
   try {
@@ -230,3 +292,32 @@ export const partialUpdateMake = async (id, partialData) => {
 }
 
 
+export const FileDownload = async (equipmentId,type) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}api/equipment/${equipmentId}/${type}`,
+      {
+        headers: authHeader(),
+        responseType: "blob"
+      }
+    );
+
+    const contentDisposition = response.headers["content-disposition"];
+    let fileName = "downloaded_file";
+
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="?(.+?)"?$/);
+      if (match) {
+        fileName = match[1];
+      }
+    }
+
+    return {
+      data: response.data,
+      fileName,
+      contentType: response.headers["content-type"]
+    };
+  } catch (error) {
+    return { data: '0' };
+  }
+};
