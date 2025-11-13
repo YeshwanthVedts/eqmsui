@@ -137,7 +137,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
 
   const handleSubmit = async (values) => {
 
-     console.log("values&&&&&&&&&&", values);
+     
     try {
       if (mode === "add") {
         const confirmed = await showConfirmation();
@@ -167,7 +167,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
     } catch (error) {
       showAlert("Error", "Something went wrong. Please try again later.", "error");
     }
-     console.log("values############", values);
+     
   };
 
  

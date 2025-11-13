@@ -211,7 +211,6 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
 
   const handleSubmit = async (values) => {
-    console.log("values&&&&&&&&&&", values);
 
     const dto = {
       ...values,
@@ -219,10 +218,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
       calibrationDueDate: values.calibrationDueDate ? format(new Date(values.calibrationDueDate), "yyyy-MM-dd") : null,
       soDate: format(new Date(values.soDate), "yyyy-MM-dd"),
 
-      
     }
-
-    console.log("dto&&&&&&&&&&", dto);
 
     try {
       if (mode === "add") {
@@ -549,7 +545,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
                               </button>
                             }
                           </label>
-                        
+
                           <input id="photo" name="photo" type="file" className="form-control mb-2"
                             onChange={(event) => {
                               const file = event.currentTarget.files[0];
@@ -573,7 +569,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
                                 <FaDownload size={16} />
                               </button>}
                           </label>
-                         
+
                           <input id="file" name="file" type="file" className="form-control mb-2"
                             onChange={(event) => {
                               const file = event.currentTarget.files[0];
