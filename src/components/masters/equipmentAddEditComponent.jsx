@@ -2,13 +2,12 @@ import { useEffect, useState, useMemo } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import "../datatable/master.css";
-import { saveEquipmentData, partialUpdateEquipment, UpdateEquipment, getEquipmentById, getEquipmentListService, getEmployeeListService, getProjectListService, FileDownload } from "../../services/masterservice";
+import { saveEquipmentData, UpdateEquipment, getEquipmentById, getEquipmentListService, getEmployeeListService, getProjectListService, FileDownload } from "../../services/masterservice";
 import { showAlert, showConfirmation } from "../datatable/swalHelper";
 import Equipment from "./equipment";
 import Navbar from "../navbar/navbar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import FormikSelect from "../../common/formikSelect";
 import Select from "react-select";
 import { format } from "date-fns";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -20,8 +19,8 @@ import { FaDownload } from "react-icons/fa";
 const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
   const [status, setStatus] = useState('');
-  const [modelList, setModelList] = useState([]);
-  const [makeList, setMakeList] = useState([]);
+
+
   const [employeeList, setEmployeeList] = useState([]);
   const [projectList, setProjectList] = useState([]);
 
@@ -30,9 +29,9 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
   const [formData, setFormData] = useState({
 
-    calibrationAgency: "",
-    calibrationDate: "",
-    calibrationDueDate: "",
+    //calibrationAgency: "",
+    //calibrationDate: "",
+    //calibrationDueDate: "",
     itemCost: "",
     itemSerialNumber: "",
     location: "",
@@ -46,6 +45,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
     projectId: "",
     equipmentName: "",
     remarks: "",
+    ssrNo: "",
 
 
   });
@@ -61,9 +61,9 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
         ...prev,
         equipmentId: data?.equipmentId ?? "",
         equipmentName: data?.equipmentName ?? "",
-        calibrationAgency: data?.calibrationAgency ?? "",
-        calibrationDate: data?.calibrationDate ?? "",
-        calibrationDueDate: data?.calibrationDueDate ?? "",
+        //calibrationAgency: data?.calibrationAgency ?? "",
+        //calibrationDate: data?.calibrationDate ?? "",
+        //calibrationDueDate: data?.calibrationDueDate ?? "",
         itemCost: data?.itemCost ?? 0,
         itemSerialNumber: data?.itemSerialNumber ?? "",
         location: data?.location ?? "",
@@ -94,17 +94,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
   const getModelAndMakeAndEquipmentMasterList = async () => {
     try {
-      // const data = await getModelListService();
-      // if (Array.isArray(data) && data.length > 0) {
-      //   const formattedData = data.map(item => ({
-      //     value: item.id,
-      //     label: item.name.trim(),
-      //   }));
-      //   setModelList(formattedData);
-      // } else {
-      //   setModelList([]);
-      //   console.error("Model list is empty or invalid.");
-      // }
+ 
 
       const employeeData = await getEmployeeListService();
       if (Array.isArray(employeeData) && employeeData.length > 0) {
@@ -123,18 +113,6 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
       }
 
 
-      // const makeData = await getMakeListService();
-      // if (Array.isArray(makeData) && makeData.length > 0) {
-      //   const formattedMakeData = makeData.map(item => ({
-      //     value: item.id,
-      //     label: item.name.trim(),
-      //   }));
-      //   setMakeList(formattedMakeData);
-      // } else {
-      //   setMakeList([]);
-      //   console.error("Make list is empty or invalid.");
-      // }
-
       const equipmentData = await getEquipmentListService();
       if (Array.isArray(equipmentData) && equipmentData.length > 0) {
         const serialnumberlist = equipmentData.map(item => item.itemSerialNumber);
@@ -146,8 +124,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
     } catch (err) {
       console.error("Failed to fetch model or make or equipment list:", err);
-      setModelList([]);
-      setMakeList([]);
+      
       setEmployeeList([]);
       setProjectList([]);
       setSerialNumberList([]);
@@ -180,6 +157,8 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
     soNo: stringWithCommonRules("So Number"),
     soDate: stringWithCommonRules("So Date"),
     remarks: stringWithCommonRules("Remarks"),
+    ssrNo: stringWithCommonRules("SSR No"),
+
 
     projectId: requiredField,
     initiateOfficer: requiredField,
@@ -214,8 +193,8 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
     const dto = {
       ...values,
-      calibrationDate: values.calibrationDate ? format(new Date(values.calibrationDate), "yyyy-MM-dd") : null,
-      calibrationDueDate: values.calibrationDueDate ? format(new Date(values.calibrationDueDate), "yyyy-MM-dd") : null,
+      //calibrationDate: values.calibrationDate ? format(new Date(values.calibrationDate), "yyyy-MM-dd") : null,
+      //calibrationDueDate: values.calibrationDueDate ? format(new Date(values.calibrationDueDate), "yyyy-MM-dd") : null,
       soDate: format(new Date(values.soDate), "yyyy-MM-dd"),
 
     }
@@ -369,14 +348,6 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
                             Make: <span className="text-danger">*</span>
                           </label>
 
-                          {/* <FormikSelect
-                            name="make"
-                            options={makeList}
-                            value={values.make}
-                            placeholder="Select Make Name"
-                            onChange={setFieldValue}
-                            onBlur={setFieldTouched}
-                          /> */}
                           <Field
                             type="text"
                             name="make"
@@ -583,7 +554,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
                       <div className="col-md-3">
                         <div className="form-group">
-                          <label htmlFor="ssrNo" className="text-start d-block">SSR Number: </label>
+                          <label htmlFor="ssrNo" className="text-start d-block">SSR Number: <span className="text-danger">*</span></label>
                           <Field type="text" name="ssrNo" className="form-control mb-2" placeholder="Enter SSR Number" />
 
                           <ErrorMessage name="ssrNo" component="div" className="text-danger text-start" />
@@ -600,8 +571,8 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
                             className="form-control mb-2"
                           >
                             <option value="">--Select--</option>
-                            <option value="Y">Yes</option>
-                            <option value="N">No</option>
+                            <option value="Y">Working</option>
+                            <option value="N">Not Working</option>
                           </Field>
 
                           <ErrorMessage name="serviceStatus" component="div" className="text-danger text-start" />
@@ -609,7 +580,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
                       </div>
 
 
-                      <div className="col-md-3">
+                      {/* <div className="col-md-3">
                         <div className="form-group">
                           <label htmlFor="calibrationAgency" className="text-start d-block">Calibration Agency : </label>
                           <Field
@@ -620,12 +591,12 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
                           />
                           <ErrorMessage name="calibrationAgency" component="div" className="text-danger text-start" />
                         </div>
-                      </div>
+                      </div> */}
 
 
 
 
-                      <div className="col-md-3">
+                      {/* <div className="col-md-3">
                         <div className="form-group">
                           <label htmlFor="calibrationDate" className="text-start d-block">
                             Calibration Date :
@@ -654,9 +625,9 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
                           <ErrorMessage name="calibrationDate" component="div" className="text-danger text-start" />
                         </div>
-                      </div>
+                      </div> */}
 
-                      <div className="col-md-3">
+                      {/* <div className="col-md-3">
                         <div className="form-group">
                           <label htmlFor="calibrationDueDate" className="text-start d-block">
                             Calibration Due Date :
@@ -678,7 +649,7 @@ const EquipmentAddEditComponent = ({ mode, equipmentId }) => {
 
                           <ErrorMessage name="calibrationDueDate" component="div" className="text-danger text-start" />
                         </div>
-                      </div>
+                      </div> */}
 
 
 

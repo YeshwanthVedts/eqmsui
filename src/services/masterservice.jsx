@@ -32,20 +32,7 @@ export const saveEquipmentData = async (data) => {
   }
 }
 
-// export const partialUpdateEquipment = async (id, partialData) => {
-//   try {
-//     const response = await axios.patch(`${API_URL}api/equipment/${id}`, partialData, {
-//       headers: {
-//         "Content-Type": "application/merge-patch+json",
-//         ...authHeader(),
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error updating equipment partially:", error);
-//     throw error;
-//   }
-// }
+
 
 export const UpdateEquipment = async (id,values) => {
   try {
@@ -117,20 +104,7 @@ export const getEquipmentLogById = async (id) => {
   }
 }
 
-// export const partialUpdateEquipmentLog = async (id, partialData) => {
-//   try {
-//     const response = await axios.patch(`${API_URL}api/equipment-usage-logs/${id}`, partialData, {
-//       headers: {
-//         "Content-Type": "application/merge-patch+json",
-//         ...authHeader(),
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error updating equipment log partially:", error);
-//     throw error;
-//   }
-// }
+
 
 export const UpdateEquipmentLog = async (id, Data) => {
   try {
@@ -321,3 +295,80 @@ export const FileDownload = async (equipmentId,type) => {
     return { data: '0' };
   }
 };
+
+export const getEquipmentLogMasterListById = async (equipmentid,fromDate,toDate) => {
+  try {
+    const response = await axios.get(`${API_URL}api/equipment-usage-logs/${equipmentid}/${fromDate}/${toDate}`, {
+      headers: {
+        ...authHeader(),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching equipment log by ID:", error);
+    throw error;
+  }
+}
+
+
+export const saveCalibrationData = async (data) => {
+  try {
+    
+    const response = await axios.post(`${API_URL}api/calibration`, data, {
+      headers: {
+         'Content-Type': 'application/json',
+        ...authHeader()
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error saving calibration data:", error);
+    throw error;
+  }
+}
+
+
+export const UpdateCalibration = async (id, Data) => {
+  try {
+    const response = await axios.put(`${API_URL}api/calibration/${id}`, Data, {
+      headers: {
+         'Content-Type': 'application/json',
+        ...authHeader(),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating calibration:", error);
+    throw error;
+  }
+}
+
+
+export const getCalibrationId = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}api/calibration/${id}`, {
+      headers: {
+        ...authHeader(),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching calibration id:", error);
+    throw error;
+  }
+}
+
+
+export const getCalibrationMasterListById = async (equipmentid) => {
+  try {
+    const response = await axios.get(`${API_URL}api/calibration/list/${equipmentid}`, {
+      headers: {
+        ...authHeader(),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching calibration by ID:", error);
+    throw error;
+  }
+}

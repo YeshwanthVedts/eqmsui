@@ -12,7 +12,7 @@ import FormikSelect from "../../common/formikSelect";
 import Select from "react-select";
 
 
-const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
+const EquipmentLogAddEditComponent = ({ mode, equpmentLogId, equipmentValue, equipmentName }) => {
 
   const [status, setStatus] = useState('');
   const [equipmentList, setEquipmentList] = useState([]);
@@ -22,10 +22,11 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
     startTime: "",
     endTime: "",
     totalHours: "",
-    usageDate: "",
-    equipmentId: "",
+    
+    equipmentId: equipmentValue || "",
     description: "",
-    usedBy:""
+    usedBy:"",
+    equipmentName:"",
 
   });
 
@@ -41,7 +42,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
         id: data?.id ?? "",
         startTime: data.startTime ? new Date(data.startTime) : "",
         endTime: data.endTime ? new Date(data.endTime) : "",
-        usageDate: data.usageDate ? new Date(data.usageDate) : "",
+        
         totalHours: data?.totalHours ?? "",
         equipmentId: data?.equipmentId ?? "",
         description: data?.description ?? "",
@@ -127,8 +128,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
 
     startTime: requiredField,
     endTime: requiredField,
-    equipmentId: requiredField,
-    usageDate: requiredField,
+   
     description: requiredField,
     totalHours: requiredField,
     usedBy: requiredField,
@@ -137,7 +137,8 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
 
   const handleSubmit = async (values) => {
 
-     
+    console.log("values",values);
+    
     try {
       if (mode === "add") {
         const confirmed = await showConfirmation();
@@ -176,10 +177,10 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
     setStatus('list');
   }
 
-  const equipmentOptions = equipmentList.map(equip => ({
-    value: equip.equipmentId,
-    label: equip.equipmentName
-  }));
+  // const equipmentOptions = equipmentList.map(equip => ({
+  //   value: equip.equipmentId,
+  //   label: equip.equipmentName
+  // }));
 
 
 
@@ -199,8 +200,8 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
         <div>
           <Navbar />
           <div className="expert-form-container">
-            <div className="form-card">
-              <h4 className="form-title">{mode === "add" ? "Add Equipment Usage Log" : "Edit Equipment Usage Log"}</h4>
+            <div className="form-card" style={{ marginLeft: "25%", marginRight: "25%" }}>
+              <h4 className="form-title">{mode === "add" ? "Add Equipment Usage Log" : "Edit Equipment Usage Log"} - {equipmentName}</h4>
               <Formik
                 initialValues={formData}
                 validationSchema={validationSchema}
@@ -209,8 +210,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
                     ...values,
                     startTime: values.startTime ? values.startTime.toISOString() : "",
                     endTime: values.endTime ? values.endTime.toISOString() : "",
-                    usageDate: values.usageDate ? values.usageDate.toISOString() : "",
-                    equipmentId: values.equipmentId ?  values.equipmentId  : null,
+                    
                   };
                   handleSubmit(payload);
                 }}
@@ -224,62 +224,11 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
                       setFieldValue={setFieldValue}
                     />
                     <Form>
-                      <div className="row">
+                      <div className="column" align="center">
 
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label htmlFor="equipmentId" className="text-start d-block">
-                          Equipment Name: <span className="text-danger">*</span>
-                          </label>
-
-                          {/* { <FormikSelect
-                            name="equipment"
-                            options={equipmentList}
-                            value={values.equipment}
-                            placeholder="Select Equipment Name"
-                            onChange={setFieldValue}
-                            onBlur={setFieldTouched}
-                          /> } */}
-
-                           <Select
-                            className="text-start"
-                            options={equipmentOptions}
-                            value={equipmentOptions.find(opt => opt.value === values.equipmentId) || null}
-                            onChange={(selected) => setFieldValue("equipmentId", selected ? selected.value : "")}
-                            isClearable
-                            placeholder="Select"
-                          />
-
-
-
-                          <ErrorMessage name="equipmentId" component="div" className="text-danger text-start" />
-                        </div>
-                      </div>
-
-                      <div className="col-md-3">
-                          <div className="form-group">
-                            <label htmlFor="usageDate" className="text-start d-block">Usage Date : <span className="text-danger">*</span></label>
-
-                            <DatePicker
-                              selected={values.usageDate}
-                              onChange={(date) => setFieldValue("usageDate", date)}
-                              className="form-control mb-2"
-                              placeholderText="Select Usage Date"
-                              dateFormat="dd-MM-yyyy"
-                              showYearDropdown
-                              showMonthDropdown
-                              dropdownMode="select"
-                              minDate={getMinDate()}
-                              maxDate={getMaxDate()}
-                              onKeyDown={(e) => e.preventDefault()}
-                            />
-
-                            <ErrorMessage name="usageDate" component="div" className="text-danger text-start" />
-                          </div>
-                        </div>
-
-                        <div className="col-md-3">
-                          <div className="form-group">
+                   
+                        <div className="col-md-4">
+                          <div className="form-group" >
                             <label htmlFor="startTime" className="text-start d-block">Start Time : <span className="text-danger">*</span></label>
 
                             <DatePicker
@@ -312,7 +261,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
                           </div>
                         </div>
 
-                        <div className="col-md-3">
+                        <div className="col-md-4">
                           <div className="form-group">
                             <label htmlFor="endTime" className="text-start d-block">End Time : <span className="text-danger">*</span></label>
 
@@ -338,7 +287,7 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
                           </div>
                         </div>
 
-                        <div className="col-md-3">
+                        <div className="col-md-4">
                           <div className="form-group">
                             <label htmlFor="totalHours" className="text-start d-block">Total Hours: <span className="text-danger">*</span></label>
                             <Field
@@ -353,20 +302,9 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
                           </div>
                         </div>
 
-                        <div className="col-md-3">
-                        <div className="form-group">
-                          <label htmlFor="description" className="text-start d-block">Description : <span className="text-danger">*</span></label>
-                          <Field
-                            type="text"
-                            name="description"
-                            className="form-control mb-2"
-                            placeholder="Enter Description"
-                          />
-                          <ErrorMessage name="description" component="div" className="text-danger text-start" />
-                        </div>
-                      </div>
 
-                      <div className="col-md-3">
+
+                        <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="usedBy" className="text-start d-block">Used By : <span className="text-danger">*</span></label>
                           <Select
@@ -380,6 +318,21 @@ const EquipmentLogAddEditComponent = ({ mode, equpmentLogId }) => {
                           <ErrorMessage name="usedBy" component="div" className="text-danger text-start" />
                         </div>
                       </div>
+
+                        <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="description" className="text-start d-block">Description : <span className="text-danger">*</span></label>
+                          <Field
+                            type="text"
+                            name="description"
+                            className="form-control mb-2"
+                            placeholder="Enter Description"
+                          />
+                          <ErrorMessage name="description" component="div" className="text-danger text-start" />
+                        </div>
+                      </div>
+
+                      
 
                       </div>
                       <div align="center">

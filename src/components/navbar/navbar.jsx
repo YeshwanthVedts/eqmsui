@@ -53,13 +53,14 @@ const Navbar = () => {
               <ul className="dropdown-menu">
                 <li><Link className="dropdown-item" to="/equipment">Equipment </Link></li>
                 <li><Link className="dropdown-item" to="/equipmentlog">Equipment Log </Link></li>
+                <li><Link className="dropdown-item" to="/calibration">Calibration</Link></li>
               </ul>
             </li>
-            <li>
+            {/* <li>
             <div className="nav-link dropdown-toggle" role="button">
                 Calibration
               </div>
-            </li>
+            </li> */}
             <li>
             <div className="nav-link dropdown-toggle" role="button">
                 Inventory Components
